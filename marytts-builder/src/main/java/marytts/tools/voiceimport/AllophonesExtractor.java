@@ -215,7 +215,9 @@ public class AllophonesExtractor extends VoiceImportComponent {
             text = getMaryXMLHeaderWithInitialBoundary(xmlLocale) + prosodyOpeningTag + text + prosodyClosingTag + "</maryxml>";
         }
 
-        OutputStream os = new BufferedOutputStream(new FileOutputStream(new File(outputDir, basename + featsExt)));
+        File f = new File(outputDir, basename + featsExt);
+        f.getParentFile().mkdirs();
+        OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
         MaryHttpClient maryClient = getMaryClient();
         maryClient.process(text, maryInputType, maryOutputType, db.getProp(db.LOCALE), null, null, os);
         os.flush();

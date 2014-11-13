@@ -154,7 +154,7 @@ public class Mary4To5VoiceConverter {
 		Map<String, String> extraVariablesToSubstitute = null;
 		
 		compiler = new VoiceCompiler.MavenVoiceCompiler(compileDir, getVoiceName(), Version.specificationVersion(), 
-				voiceDescription.getLocale(), voiceDescription.getGender(), domain, samplingRate, isUnitSelectionVoice(), filesForResources, 
+				voiceDescription.getLocale(), voiceDescription.getGender(), voiceDescription.getVoiceDescription(), domain, samplingRate, isUnitSelectionVoice(), filesForResources, 
 				filesForFilesystem, extraVariablesToSubstitute);
 
 		logger.debug("Creating directories");

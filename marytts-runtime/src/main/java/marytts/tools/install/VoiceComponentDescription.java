@@ -38,6 +38,7 @@ public class VoiceComponentDescription extends ComponentDescription
     private String type;
     private String dependsLanguage;
     private String dependsVersion;
+    private String description;
     
     @Override
     public void replaceWithUpdate() {
@@ -115,6 +116,14 @@ public class VoiceComponentDescription extends ComponentDescription
         this.dependsVersion = aVersion;
     }
 
+    public String getVoiceDescription() {
+    	return this.description;
+    }
+    
+    public void setVoiceDescription(String description) {
+    	this.description = description;
+    }
+    
     
     @Override
     public Document createComponentXML()

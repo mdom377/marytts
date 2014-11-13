@@ -78,7 +78,7 @@ public class VoiceCompiler extends VoiceImportComponent {
 		compiler = createCompiler(compileDir);
 		
 		if (!isUnitSelectionVoice()) {
-			mapFeatures();
+			//mapFeatures();
 		}
 		
 		logger.info("Creating directories");
@@ -125,7 +125,19 @@ public class VoiceCompiler extends VoiceImportComponent {
             props = new TreeMap<String, String>();
             props.put(getCompileDirProp(), new File(db.getVoiceFileDir(), "voice-"+getVoiceName(db)).getAbsolutePath());
         }
+        
+        addAdditionalProps(db, props);
         return props;
+	}
+	
+	/**
+	 * Used for adding additional properties to classes derived from VoiceCompiler (other than the base compiler dir property)
+	 * @param db DatabaseLayout
+	 * @param props Property map
+	 */
+	protected void addAdditionalProps(DatabaseLayout db, SortedMap<String, String> props) {
+		return;
+		
 	}
 
 	protected String getVoiceName(DatabaseLayout db) {
@@ -191,7 +203,7 @@ public class VoiceCompiler extends VoiceImportComponent {
 		File[] filesForResources = getFilesForResources();
 		File[] filesForFilesystem = getFilesForFilesystem();
 		Map<String, String> extraVariablesToSubstitute = getExtraVariableSubstitutionMap();
-		return new MavenVoiceCompiler(compileDir, getVoiceName(db), db.getMaryVersion(), db.getLocale(), db.getGender(), db.getDomain(), db.getSamplingRate(), isUnitSelectionVoice(),
+		return new MavenVoiceCompiler(compileDir, getVoiceName(db), db.getMaryVersion(), db.getLocale(), db.getGender(), db.getDomain(), db.getVoiceDescription(), db.getSamplingRate(), isUnitSelectionVoice(),
 				filesForResources, filesForFilesystem, extraVariablesToSubstitute);
 	}
 
@@ -204,6 +216,7 @@ public class VoiceCompiler extends VoiceImportComponent {
 		protected Locale locale;
 		protected String gender;
 		protected String domain;
+		protected String description;
 		protected int samplingRate;
 		protected boolean isUnitSelectionVoice;
 		protected File[] filesForResources;
@@ -219,7 +232,7 @@ public class VoiceCompiler extends VoiceImportComponent {
 		protected File testJavaDir;
 		protected File libVoiceDir;
 		
-		public MavenVoiceCompiler(File compileDir, String voiceName, String voiceVersion, Locale locale, String gender, String domain, int samplingRate, boolean isUnitSelectionVoice,
+		public MavenVoiceCompiler(File compileDir, String voiceName, String voiceVersion, Locale locale, String gender, String domain, String description, int samplingRate, boolean isUnitSelectionVoice,
 				File[] filesForResources, File[] filesForFilesystem, Map<String, String> extraVariablesToSubstitute) {
 			this.compileDir = compileDir;
 			this.voiceName = voiceName;
@@ -227,8 +240,10 @@ public class VoiceCompiler extends VoiceImportComponent {
 			this.locale = locale;
 			this.gender = gender;
 			this.domain = domain;
+			this.description = description;
 			this.samplingRate = samplingRate;
 			this.isUnitSelectionVoice = isUnitSelectionVoice;
+			
 			this.substitutor = new StrSubstitutor(getVariableSubstitutionMap(extraVariablesToSubstitute));
 			
 			this.filesForResources = filesForResources;
@@ -246,6 +261,8 @@ public class VoiceCompiler extends VoiceImportComponent {
 			m.put("SAMPLINGRATE", String.valueOf(samplingRate));
 			m.put("PACKAGE", getPackageName());
 			m.put("VOICECLASS", isUnitSelectionVoice ? "marytts.unitselection.UnitSelectionVoice" : "marytts.htsengine.HMMVoice");
+			m.put("TYPE", isUnitSelectionVoice ? "unit selection" : "hmm");
+			m.put("DESCRIPTION", description);
 			if (extra != null) {
 				m.putAll(extra);
 			}
@@ -333,7 +350,7 @@ public class VoiceCompiler extends VoiceImportComponent {
 
 		
 		public void compileWithMaven() throws IOException, InterruptedException {
-			Process maven = Runtime.getRuntime().exec("mvn verify", null, compileDir);
+			Process maven = Runtime.getRuntime().exec("mvn install -DskipTests", null, compileDir);
 			StreamGobbler merr = new StreamGobbler(maven.getErrorStream(), "maven err");
 			StreamGobbler mout = new StreamGobbler(maven.getInputStream(), "maven out");
 			merr.start();

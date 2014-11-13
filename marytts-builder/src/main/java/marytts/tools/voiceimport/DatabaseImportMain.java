@@ -46,12 +46,9 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +69,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ArrayUtils;
 
 import marytts.util.io.BasenameList;
 
@@ -92,7 +90,7 @@ public class DatabaseImportMain extends JFrame
     protected DatabaseLayout db = null;
     protected BasenameList bnl = null;
     protected String currentComponent;
-    
+    public boolean firstArgDir = false;
     
    
     
@@ -329,7 +327,7 @@ public class DatabaseImportMain extends JFrame
                     null, null, null);
             if (answer == JOptionPane.YES_OPTION) {            
                 JFileChooser fc = new JFileChooser();
-                fc.setSelectedFile(new File( db.getProp(db.BASENAMEFILE) ));
+                fc.setSelectedFile(new File( db.getProp(DatabaseLayout.BASENAMEFILE) ));
                 int returnVal = fc.showSaveDialog(this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     bnl.write( fc.getSelectedFile() );
@@ -429,6 +427,13 @@ public class DatabaseImportMain extends JFrame
         if (voiceDir == null) {
         	throw new IllegalArgumentException("Cannot determine voice building directory.");
         }
+        
+        
+        if (voiceDir.getAbsolutePath().equals(new File(args[0]).getAbsolutePath()))
+        {
+        	args = (String[]) ArrayUtils.remove(args, 0);
+        }
+        
         File wavDir =  new File(voiceDir, "wav");
         //System.out.println(System.getProperty("user.dir")+System.getProperty("file.separator")+"wav");
         assert wavDir.exists() : "no wav dir at "+wavDir.getAbsolutePath();
@@ -470,7 +475,7 @@ public class DatabaseImportMain extends JFrame
             }
         } else {
             /* Display GUI */       
-            String voicename = db.getProp(db.VOICENAME);
+            String voicename = db.getProp(DatabaseLayout.VOICENAME);
             DatabaseImportMain importer = 
                 new DatabaseImportMain("Database import: "+voicename, components, db,groups2comps);
             importer.pack();

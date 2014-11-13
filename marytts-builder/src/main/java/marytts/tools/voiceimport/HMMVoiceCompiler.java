@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.SortedMap;
 import java.util.StringTokenizer;
 
 import org.apache.commons.io.FileUtils;
@@ -31,6 +32,7 @@ public class HMMVoiceCompiler extends VoiceCompiler {
         LSP: gamma=1  alpha=0.0  linear gain/log gain 
     Mel-LSP: gamma=1  alpha=0.42 log gain
     MGC-LSP: gamma=3  alpha=0.42 log gain  */
+	
     public static final String alpha = "HMMVoiceConfigure.freqWarp";
     public static final String gamma = "HMMVoiceConfigure.gamma";    
     public static final String logGain = "HMMVoiceConfigure.lnGain";    
@@ -164,6 +166,7 @@ public class HMMVoiceCompiler extends VoiceCompiler {
 	protected String getCompileDirProp() {
 		return "HMMVoiceCompiler.compileDir";
 	}
+
 
 	@Override
 	protected String getVoiceName(DatabaseLayout db) {
@@ -342,7 +345,6 @@ public class HMMVoiceCompiler extends VoiceCompiler {
         return actualFeatureNames;
     }
  
-
     
     /**
      * Replace label with information in the global map list actualFeatureNames

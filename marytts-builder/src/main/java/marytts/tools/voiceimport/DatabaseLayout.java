@@ -124,6 +124,8 @@ public class DatabaseLayout
     
     public static final String VOCALIZATIONSDIR = "db.vocalizationsDir";
     
+    public static final String VOICEDESCRIPTION = "db.voiceDesc";
+    
     // paths used in HMM voice creation
     public static final String AWKPATH       = "external.awkPath";
     public static final String PERLPATH      = "external.perlPath";
@@ -702,6 +704,7 @@ public class DatabaseLayout
         someProps.put(HALFPHONELABDIR, rootDir+"halfphonelab"+fileSeparator);
         someProps.put(HALFPHONEFEATUREDIR, rootDir+"halfphonefeatures"+fileSeparator);
         someProps.put(VOCALIZATIONSDIR, rootDir+"vocalizations"+fileSeparator);
+        someProps.put(VOICEDESCRIPTION, "");
         return someProps;
     }
     
@@ -1084,7 +1087,10 @@ public class DatabaseLayout
     public String getDomain() {
         return getProp(DOMAIN).toLowerCase();
     }
-
+    
+    public String getVoiceDescription() {
+    	return getProp(VOICEDESCRIPTION).toLowerCase();
+    }
     public int getSamplingRate() {
         return Integer.parseInt(getProp(SAMPLINGRATE));
     }

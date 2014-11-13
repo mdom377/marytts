@@ -40,7 +40,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -93,6 +98,36 @@ public class BasenameList
         hasChanged = false;
     }
     
+    
+    
+    private void DirectoryLister(String ext, File startPath, List<File> files)
+    {
+    	File dir = new File(startPath.getAbsolutePath());
+    	
+    	
+    	
+        if ( !dir.exists() ) {
+            throw new RuntimeException( "Directory [" + dir.getAbsolutePath() + "] does not exist. Can't find the [" + dir.getName() + "] files." );
+        }
+        
+        File[] selectedFiles = dir.listFiles();
+        
+        for (File file : selectedFiles) {
+			if (file.isDirectory())
+			{
+				DirectoryLister(ext, file, files);
+			} else {
+				if (file.getName().endsWith(ext)) 
+					files.add(file);	
+					
+			}
+				
+				
+		}
+        
+ 
+    }
+    
     /**
      * This constructor lists the .<extension> files from directory dir,
      * and initializes an an array with their list of alphabetically
@@ -102,6 +137,7 @@ public class BasenameList
      * @param extension The extension of the files to list.
      * 
      */
+
     public BasenameList( String dirName, final String extension ) {
         fromDir = dirName;
         if ( extension.indexOf(".") != 0 ) fromExt = "." + extension; // If the dot was not included, add it.
@@ -113,11 +149,27 @@ public class BasenameList
             throw new RuntimeException( "Directory [" + dirName + "] does not exist. Can't find the [" + extension + "] files." );
         }
         /* List the .extension files */
-        File[] selectedFiles = dir.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.endsWith( extension );
-            }
-        });
+        
+        FilenameFilter extFilter = new FilenameFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				// TODO Auto-generated method stub
+				return name.endsWith(extension);
+			}
+		};
+		
+	
+		List<File> files = new ArrayList<File>();
+		DirectoryLister(extension, dir, files);
+		File[] selectedFiles = new File[files.size()];
+		files.toArray(selectedFiles);
+		
+//        File[] selectedFiles = dir.listFiles(new FilenameFilter() {
+//            public boolean accept(File dir, String name) {
+//                return name.endsWith( extension );
+//            }
+//        });
         
         /* Sort the file names alphabetically */
         Arrays.sort( selectedFiles );
@@ -127,7 +179,11 @@ public class BasenameList
         String str = null;
         int subtractFromFilename = extension.length();
         for ( int i = 0; i < selectedFiles.length; i++ ) {
-            str = selectedFiles[i].getName().substring( 0, selectedFiles[i].getName().length() - subtractFromFilename );
+        	Path pathAbsolute = Paths.get(selectedFiles[i].getAbsolutePath());
+        	Path pathBase = Paths.get(dirName);
+        	Path pathRelative = pathBase.relativize(pathAbsolute);
+        	str = pathRelative.toString().substring( 0, pathRelative.toString().length() - subtractFromFilename );
+         
             add( str );
         }        
         hasChanged = false;
