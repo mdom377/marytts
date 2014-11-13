@@ -148,6 +148,8 @@ public class UnitLabel {
     public static void writeLabFile(UnitLabel[] ulab, String outFile)
     throws IOException
     {
+    	File f = new File(outFile);
+    	f.getParentFile().mkdirs();
         PrintWriter pw = new PrintWriter(new FileWriter(outFile));
         pw.println("#");
         for(int i=0; i<ulab.length; i++){

@@ -314,15 +314,8 @@ public class EHMMLabeler extends VoiceImportComponent {
 		PrintWriter pw = new PrintWriter(
 				new OutputStreamWriter(process.getOutputStream()));
 
-		//make directories in feat folder for each speaker
-		String[] paths = bnl.getListAsArray();
-
-		String featDir = ehmm.getAbsoluteFile() +  File.separator + "feat";
-		for (String path : paths) {
-			File f = new File(featDir + File.separator + path);
-			f.getParentFile().mkdirs();
-
-		}
+		MakeDirectories("feat");
+		
 		System.out.println("( cd "+ehmm.getAbsolutePath()
 				+"; "+getProp(EHMMDIR)+"/bin/FeatureExtraction "
 				+outputDir+"/"+"ehmm"+".featSettings "
@@ -354,9 +347,17 @@ public class EHMMLabeler extends VoiceImportComponent {
 		}
 	}
 
-	private void MakeDirectories(String path, String dirName)
+	private void MakeDirectories(String baseDir)
 	{
+		//make directories in feat folder for each speaker
+		String[] paths = bnl.getListAsArray();
 
+		String dir = ehmm.getAbsoluteFile() +  File.separator + baseDir;
+		for (String path : paths) {
+			File f = new File(dir + File.separator + path);
+			f.getParentFile().mkdirs();
+
+		}
 	}
 	/**
 	 * Scaling Features for EHMM Training
@@ -543,7 +544,7 @@ public class EHMMLabeler extends VoiceImportComponent {
 		//get an output stream to write to the shell
 		PrintWriter pw = new PrintWriter(
 				new OutputStreamWriter(process.getOutputStream()));
-
+		MakeDirectories("lab");
 		System.out.println("( cd "+ehmm.getAbsolutePath()
 				+"; "+getProp(EHMMDIR)+"/bin/edec "
 				+outputDir+"/"+"ehmm"+".phoneList.int "
