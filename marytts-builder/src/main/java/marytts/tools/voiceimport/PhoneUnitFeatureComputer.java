@@ -197,6 +197,7 @@ public class PhoneUnitFeatureComputer extends VoiceImportComponent
                 + basename + xmlExt);
         String text = FileUtils.getFileAsString(allophoneFile, "UTF-8");
         
+        new File(unitfeatureDir, basename + featsExt).getParentFile().mkdirs();
         OutputStream os = new BufferedOutputStream(new FileOutputStream(new File( unitfeatureDir, basename + featsExt)));
         MaryHttpClient maryClient = getMaryClient();
         

@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -145,7 +147,14 @@ public class TranscriptionAligner extends VoiceImportComponent {
         Document doc = docBuilder.parse(nextFile);
 
         // open destination xml file
-        Writer docDest  = new OutputStreamWriter(new FileOutputStream(xmlOutDir.getAbsolutePath() + System.getProperty("file.separator")+nextFile.getName()), "UTF-8");
+        
+    
+    	
+    	String relPath = GetRelativePath(nextFile.getAbsolutePath(), promptAllophonesDir);
+    	new File(xmlOutDir.getAbsolutePath() + System.getProperty("file.separator")+relPath).getParentFile().mkdirs();
+    	
+        //Nextfile.getname bit screwing up - need to fix to allow subdirectoroes
+        Writer docDest  = new OutputStreamWriter(new FileOutputStream(xmlOutDir.getAbsolutePath() + System.getProperty("file.separator")+relPath), "UTF-8");
 
         // open file with manual transcription that is to be aligned
         String manTransString;
@@ -154,8 +163,9 @@ public class TranscriptionAligner extends VoiceImportComponent {
             String trfdir = db.getProp(db.LABDIR);
             
             String trfname = trfdir + 
-            nextFile.getName().substring(0, nextFile.getName().length() - 4) + ".lab";
+            		relPath.substring(0, relPath.length() - 4) + ".lab";
             
+            new File(trfname).getParentFile().mkdirs();
             System.out.println(trfname);
             
             manTransString = MaryTranscriptionAligner.readLabelFile(aligner.getEntrySeparator(), aligner.getEnsureInitialBoundary(), trfname);

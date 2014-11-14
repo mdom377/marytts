@@ -152,6 +152,9 @@ public class AllophonesExtractor extends VoiceImportComponent {
             System.out.println("    " + bnl.getName(i));
         }
         System.out.println("...Done.");
+        
+        //Save basename list for extracted allophones
+        bnl.write( db.getProp(DatabaseLayout.BASENAMEFILE) );
         return true;
     }
 

@@ -19,6 +19,8 @@
  */
 package marytts.tools.voiceimport;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.SortedMap;
 
 import marytts.util.MaryUtils;
@@ -147,6 +149,15 @@ public abstract class VoiceImportComponent
     
     public String getHelpTextForProp(String propname){
         return props2Help.get(propname);
+    }
+    
+    protected String GetRelativePath(String absPath, String basePath)
+    {
+    	Path pathAbsolute = Paths.get(absPath);
+    	Path pathBase = Paths.get(basePath);
+    	Path pathRelative = pathBase.relativize(pathAbsolute);
+    	
+    	return pathRelative.toString();
     }
     
 }

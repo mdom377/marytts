@@ -158,6 +158,7 @@ public class PhoneUnitLabelComputer extends VoiceImportComponent
 
         // write to phonelab file:
         File phoneLabFile = new File(unitlabelDir, baseName + unitlabelExt);
+        phoneLabFile.getParentFile().mkdirs();
         PrintWriter out = new PrintWriter(phoneLabFile);
         // header:
         for (String headerLine : labFileData.getHeader()) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<marytts-install xmlns="http://mary.dfki.de/installer">
+    <voice gender="female" locale="en-NZ" name="ennz-jh-voice_01-hsmm"
+        type="hmm" version="5.2-SNAPSHOT">
+        <description>jh voice trained with utterances 1 - 521, and standard settings</description>
+        <license href="http://mary.dfki.de/download/by-nd-3.0.html"/>
+        <package filename="voice-ennz-jh-voice_01-hsmm-5.2-SNAPSHOT.zip"
+            md5sum="${zip_md5}" size="${zip_size}">
+            <location href="http://mary.dfki.de/download/5.2-SNAPSHOT/"/>
+        </package>
+        <depends language="en-NZ" version="5.2-SNAPSHOT"/>
+    </voice>
+</marytts-install>

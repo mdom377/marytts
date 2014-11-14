@@ -824,6 +824,7 @@ public class DatabaseLayout
             System.out.println("Loading basename list from wav files");
             //bnl = new BasenameList(getProp(WAVDIR),getProp(WAVEXT));
             bnl = new BasenameList(getProp(WAVDIR),getProp(WAVEXT));
+            
         } else {
             //load basename list from file
             try {

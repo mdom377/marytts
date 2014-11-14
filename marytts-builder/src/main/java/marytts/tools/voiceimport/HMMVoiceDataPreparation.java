@@ -251,6 +251,11 @@ public class HMMVoiceDataPreparation extends VoiceImportComponent{
 
            File dirSpeakersRaw = new File(dataDir + "/raw");
            
+           //Use SOX to create raw files (remove all existing files before creating new files)
+           String wavDirName  = voiceDir + "/wav";
+           String rawDirName = voiceDir + "/raw";
+           convertWav2Raw_Adapt(voiceDir + "wav2raw_adapt.sh", wavDirName, dirSpeakersRaw.getAbsolutePath());
+           
            String[] speakers;
            if(dirSpeakersRaw.exists() && dirSpeakersRaw.list().length > 0){ 
                speakers = dirSpeakersRaw.list();
@@ -264,7 +269,9 @@ public class HMMVoiceDataPreparation extends VoiceImportComponent{
                    break;
                  }
                }
-           } else {            
+           } else {   
+      
+        	   
                System.out.println("Error: directory " + voiceDir + "/raw does not contain files." );
                raw = false;
            }
@@ -373,6 +380,19 @@ public class HMMVoiceDataPreparation extends VoiceImportComponent{
         cmdLine = "chmod +x " + wav2rawCmd;
         General.launchProc(cmdLine, "wav2raw", voiceDir);
         cmdLine = wav2rawCmd + " " + soxPath + " " + wavDirName + " " + rawDirName ;
+        General.launchProc(cmdLine, "wav2raw", voiceDir);  
+    }
+    
+    private void convertWav2Raw_Adapt(String scriptPath, String wavDirName, String rawDirName) {
+        String cmdLine;
+        String wav2rawCmd   = scriptPath;
+        System.out.println("Converting wav files to raw from: " + wavDirName + "  to: " + rawDirName);
+        File rawDir  = new File(rawDirName);
+        if(!rawDir.exists())
+          rawDir.mkdir();  
+        cmdLine = "chmod +x " + wav2rawCmd;
+        General.launchProc(cmdLine, "wav2raw", voiceDir);
+        cmdLine = wav2rawCmd + " " + wavDirName + " " + rawDirName ;
         General.launchProc(cmdLine, "wav2raw", voiceDir);  
     }
     

@@ -283,6 +283,7 @@ public class HTKLabeler extends VoiceImportComponent {
             
             htk.mkdir();
             File lab = new File(htk.getAbsolutePath()+"/lab");
+            
             //call setup of HTK in this directory
             Runtime rtime = Runtime.getRuntime();
             //get a shell
@@ -480,6 +481,7 @@ public class HTKLabeler extends VoiceImportComponent {
             for (int i=0; i<bnl.getLength(); i++) {
                 //System.out.println( "    " + bnl.getName(i) );
                 String mFile = getProp(HTDIR)+File.separator+"feat"+File.separator+bnl.getName(i)+".mfcc";
+                new File(mFile).getParentFile().mkdirs();
                 pw.println(mFile);
             }
             pw.flush();

@@ -428,11 +428,14 @@ public class DatabaseImportMain extends JFrame
         	throw new IllegalArgumentException("Cannot determine voice building directory.");
         }
         
-        
-        if (voiceDir.getAbsolutePath().equals(new File(args[0]).getAbsolutePath()))
+        if (args.length > 0)
         {
-        	args = (String[]) ArrayUtils.remove(args, 0);
+        	if (voiceDir.getAbsolutePath().equals(new File(args[0]).getAbsolutePath()))
+            {
+            	args = (String[]) ArrayUtils.remove(args, 0);
+            }	
         }
+        
         
         File wavDir =  new File(voiceDir, "wav");
         //System.out.println(System.getProperty("user.dir")+System.getProperty("file.separator")+"wav");
@@ -440,10 +443,22 @@ public class DatabaseImportMain extends JFrame
         
         /* Read the list of components */
         File importMainConfigFile = new File(voiceDir, "importMain.config");
+        
         if (!importMainConfigFile.exists()) {
         	FileUtils.copyInputStreamToFile(DatabaseImportMain.class.getResourceAsStream("importMain.config"), importMainConfigFile);
         }
+        
+        
+        
         assert importMainConfigFile.exists();
+        
+        File wav2raw_adapt = new File(voiceDir, "wav2raw_adapt.sh");
+        if (!wav2raw_adapt.exists())
+        {
+        	FileUtils.copyInputStreamToFile(DatabaseImportMain.class.getResourceAsStream("wav2raw_adapt.sh"), wav2raw_adapt);
+        }
+        
+        assert wav2raw_adapt.exists();
         
         String[][] groups2comps = readComponentList(new FileInputStream(importMainConfigFile));
 

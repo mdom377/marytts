@@ -982,10 +982,11 @@ public class HMMVoiceMakeData extends VoiceImportComponent{
           fullMlf.write("\"*/*.lab\" -> \"" + voiceDir + "hts/data/labels/full/" + speakers[j] + "\"\n");        
           monoMlf.write("\"*/*.lab\" -> \"" + voiceDir + "hts/data/labels/mono/" + speakers[j] + "\"\n");
         
+          int numContextFeatures = Math.min(10, feaFilesSpeaker.length/2);
           // Copy 10 files in gen directory to test with htsengine
-          System.out.println("Copying 10 context feature files in gen directory for testing with the HTS htsengine.");
+          System.out.println("Copying " + numContextFeatures + " context feature files in gen directory for testing with the HTS htsengine.");
           String cmdLine;
-          for (int i=0; i<10; i++) {
+          for (int i=0; i<numContextFeatures; i++) {
             basename = StringUtils.getFileName(feaFilesSpeaker[i]);
             FileUtils.copy(voiceDir + "hts/data/labels/full/" + speakers[j] + "/" + basename + ".lab" , 
                            voiceDir + "hts/data/labels/gen/"  + speakers[j] + "/" + basename + ".lab");

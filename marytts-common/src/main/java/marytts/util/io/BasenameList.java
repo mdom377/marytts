@@ -179,6 +179,7 @@ public class BasenameList
         String str = null;
         int subtractFromFilename = extension.length();
         for ( int i = 0; i < selectedFiles.length; i++ ) {
+        	
         	Path pathAbsolute = Paths.get(selectedFiles[i].getAbsolutePath());
         	Path pathBase = Paths.get(dirName);
         	Path pathRelative = pathBase.relativize(pathAbsolute);
