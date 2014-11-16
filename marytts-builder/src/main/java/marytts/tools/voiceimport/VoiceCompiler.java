@@ -78,7 +78,7 @@ public class VoiceCompiler extends VoiceImportComponent {
 		compiler = createCompiler(compileDir);
 		
 		if (!isUnitSelectionVoice()) {
-			//mapFeatures();
+			mapFeatures();
 		}
 		
 		logger.info("Creating directories");
