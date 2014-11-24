@@ -429,6 +429,15 @@ public class EHMMLabeler extends VoiceImportComponent {
 			if (!modelFile.exists()) {
 				throw new IOException("Model file "+modelFile.getAbsolutePath()+" does not exist");
 			}
+			System.out.println("( cd "+ehmm.getAbsolutePath()
+					+"; "+"cp "+getProp(INITEHMMDIR)+"/etc/ehmm.phoneList "
+					+outputDir
+					+"; "+"cp "+getProp(INITEHMMDIR)+"/mod/model101.txt "
+					+getProp(EDIR)+"/mod/ "
+					+"; perl "+getProp(EHMMDIR)+"/bin/seqproc.pl "
+					+outputDir+"/"+"ehmm"+".align "
+					+outputDir+"/"+"ehmm"+".phoneList 2 2 13 >> log.txt"
+					+"; exit )\n");
 			pw.print("( cd "+ehmm.getAbsolutePath()
 					+"; "+"cp "+getProp(INITEHMMDIR)+"/etc/ehmm.phoneList "
 					+outputDir

@@ -126,6 +126,11 @@ public class DatabaseLayout
     
     public static final String VOICEDESCRIPTION = "db.voiceDesc";
     
+    //MAUS paths
+    public static final String MAUSDIR  = "/home/xxxx/MAUS/";
+    public static final String PARDIR = "/home/xxxx/project/PAR/";
+    public static final String MAUSLANG = "nze";
+    
     // paths used in HMM voice creation
     public static final String AWKPATH       = "external.awkPath";
     public static final String PERLPATH      = "external.perlPath";
