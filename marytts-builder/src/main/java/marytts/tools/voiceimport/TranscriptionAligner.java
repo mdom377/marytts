@@ -64,11 +64,6 @@ public class TranscriptionAligner extends VoiceImportComponent {
     
 
     
-
-    
-    public TranscriptionAligner() {
-    }
-
     public String getName() {
         return "TranscriptionAligner";
     }

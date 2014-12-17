@@ -188,6 +188,11 @@ public class PhoneLabelFeatureAligner extends VoiceImportComponent
         boolean removeAll = false;
         boolean skipAll = false;
         boolean tryAgain = true;
+        
+        if (!this.guiMode)
+        	removeAll = true;
+        
+        
         for (Iterator<String> it = problems.keySet().iterator(); it.hasNext(); ) {
             String basename = it.next();
             String errorMessage;
@@ -230,7 +235,7 @@ public class PhoneLabelFeatureAligner extends VoiceImportComponent
                         case REMOVE:
                             tryAgain = false;
                             bnl.remove( basename );
-                            deleteProblemsYesNo(null,basename);
+                            deleteProblemsYesNo(null,basename, this.guiMode);
                             remainingProblems--;
                             System.out.println( " -> Removed from the utterance list. OK" );
                             break;
@@ -255,9 +260,11 @@ public class PhoneLabelFeatureAligner extends VoiceImportComponent
                 remainingProblems--;
             }
         }
+        
+        
         if (removeAll){
             //ask user if asscociated files should be deleted
-            deleteProblemsYesNo(problems,null);
+            deleteProblemsYesNo(problems,null, this.guiMode);
         }
         
         System.out.println( "Removed [" + (bnlLengthIn-bnl.getLength()) + "/" + bnlLengthIn
@@ -296,16 +303,24 @@ public class PhoneLabelFeatureAligner extends VoiceImportComponent
      * @param someProblems
      * @throws IOException
      */
-    protected void deleteProblemsYesNo(Map<String,String> someProblems, String basename) throws IOException
+    protected void deleteProblemsYesNo(Map<String,String> someProblems, String basename, boolean guiMode) throws IOException
     {
-        int choice = JOptionPane.showOptionDialog(null,
-                "Removed problematic utterance(s) from List. Also delete file(s)?",
-                "Delete problematic file(s)",
-                JOptionPane.YES_NO_CANCEL_OPTION, 
-                JOptionPane.QUESTION_MESSAGE, 
-                null,
-                new String[] {"Yes", "No"},
-                null);
+    	int choice;
+    	if (guiMode)
+    	{
+            choice = JOptionPane.showOptionDialog(null,
+                    "Removed problematic utterance(s) from List. Also delete file(s)?",
+                    "Delete problematic file(s)",
+                    JOptionPane.YES_NO_CANCEL_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, 
+                    null,
+                    new String[] {"Yes", "No"},
+                    null);
+    		
+    	} else {
+    		choice = 0;
+    	}
+
         
         if (choice == 0) {
             if (someProblems != null) {

@@ -41,12 +41,23 @@ public abstract class VoiceImportComponent
     protected BasenameList bnl;
     protected DatabaseLayout db;
     protected Logger logger;
+    protected boolean guiMode = true;
     
     protected VoiceImportComponent() {
         if (!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
             BasicConfigurator.configure();
         }
         logger = MaryUtils.getLogger(getName());
+        this.guiMode = true;
+    }
+    
+    /**
+     * Informs VoiceImportComponent whether we are in GUI mode or not (to determine whether we need to automate tasks).
+     * @param guiMode True = in GUI mode, False = command-line mode
+     */
+    protected void SetGuiMode(boolean guiMode)
+    {
+      	this.guiMode = guiMode;
     }
     
     protected abstract void setupHelp();

@@ -462,7 +462,9 @@ public class DatabaseImportMain extends JFrame
         
         String[][] groups2comps = readComponentList(new FileInputStream(importMainConfigFile));
 
-        VoiceImportComponent[] components = createComponents(groups2comps);
+        boolean guiMode = (args.length == 0);
+        
+        VoiceImportComponent[] components = createComponents(groups2comps, guiMode);
         
         /* Load DatabaseLayout */
         File configFile = new File(voiceDir, "database.config");
@@ -471,7 +473,7 @@ public class DatabaseImportMain extends JFrame
         if (!db.isInitialized())
             return;
         
-        if (args.length > 0) { // non-gui mode: arguments are expected to be component names, in order or application
+        if (!guiMode) { // non-gui mode: arguments are expected to be component names, in order or application
             for (String compName : args) {
             	VoiceImportComponent component = null;
                 for (VoiceImportComponent comp : components) {
@@ -508,7 +510,7 @@ public class DatabaseImportMain extends JFrame
 	 * @throws IllegalAccessException
 	 * @throws ClassNotFoundException
 	 */
-	private static VoiceImportComponent[] createComponents(String[][] groups2comps) 
+	private static VoiceImportComponent[] createComponents(String[][] groups2comps, boolean guiMode) 
 	throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		/* Create component classes */
         List<VoiceImportComponent> compsList = new ArrayList<VoiceImportComponent>();
@@ -523,6 +525,7 @@ public class DatabaseImportMain extends JFrame
                 //System.out.println(className);
                 //create a new instance of this class and store in compsList
                 compsList.add((VoiceImportComponent)Class.forName(className).newInstance());
+                compsList.get(compsList.size()-1).SetGuiMode(guiMode);
                 //remove "de.dfki...." from class name and store in groups2comps
                 nextComps[j] = className.substring(className.lastIndexOf('.')+1);
             }
