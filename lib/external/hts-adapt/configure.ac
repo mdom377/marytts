@@ -395,6 +395,60 @@ AC_SUBST(QNUM)
 AC_SUBST(PWD)
 
 
+AC_ARG_VAR([MDLFMGC],[tree size control param for MGC (default = 1.0)])
+AC_ARG_VAR([MDLFLF0],[tree size control param for LF0 (default = 1.0)])
+AC_ARG_VAR([MDLFSTR],[tree size control param for STR (default = 1.0)])
+AC_ARG_VAR([MDLFDUR],[tree size control param for DUR (default = 1.0)])
+
+AC_ARG_VAR([MOCCMGC],[minimum occupancy count control param for MGC (default = 10)])
+AC_ARG_VAR([MOCCLF0],[minimum occupancy count control for LF0 (default = 10)])
+AC_ARG_VAR([MOCCSTR],[minimum occupancy count control for STR (default = 10)])
+AC_ARG_VAR([MOCCDUR],[minimum occupancy count control for DUR (default = 5)])
+
+if test -z "$MDLFMGC"; then
+	MDLFMGC=1.0
+fi
+
+if test -z "$MDLFLF0"; then
+	MDLFLF0=1.0
+fi
+
+if test -z "$MDLFSTR"; then
+	MDLFSTR=1.0
+fi
+
+if test -z "$MDLFDUR"; then
+	MDLFDUR=1.0
+fi
+
+if test -z "$MOCCMGC"; then
+	MOCCMGC=10
+fi
+
+if test -z "$MOCCLF0"; then
+	MOCCLF0=10
+fi
+
+if test -z "$MOCCSTR"; then
+	MOCCSTR=10
+fi
+
+if test -z "$MOCCDUR"; then
+	MOCCDUR=5.0
+fi
+
+if test -z "$GVMDLFMGC"; then
+	GVMDLFMGC=1.0
+fi
+
+if test -z "$GVMDLFLF0"; then
+	GVMDLFLF0=1.0
+fi
+
+if test -z "$GVMDLFSTR"; then
+	GVMDLFSTR=1.0
+fi
+
 
 # setting of mel-generalized cepstral analysis, F0 extraction, and postfiltering related settings
 # parse command-line arguments

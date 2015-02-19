@@ -107,6 +107,21 @@ public class HMMVoiceConfigure extends VoiceImportComponent{
     public final String NSTATE        = name+".numState";
     public final String NITER         = name+".numIterations";
     
+
+    public final String MDLFMGC 	   = name+".mdlfMGC";
+    public final String MDLFLF0 	   = name+".mdlfLF0";
+    public final String MDLFSTR 	   = name+".mdlfSTR";
+    public final String MDLFDUR 	   = name+".mdlfDUR";
+    
+    public final String GVMDLFMGC 	   = name+".gvmdlfMGC";
+    public final String GVMDLFLF0 	   = name+".gvmdlfLF0";
+    public final String GVMDLFSTR 	   = name+".gvmdlfSTR";    
+    
+    public final String MOCCMGC 	   = name+".moccMGC";
+    public final String MOCCLF0 	   = name+".moccLF0";
+    public final String MOCCSTR 	   = name+".moccSTR";
+    public final String MOCCDUR 	   = name+".moccDUR";        
+    
     /** settings for HTS ADAPT training scripts */
     public final String ADAPTTRAINSPKR = name+".adaptTrainSpkr";
     public final String ADAPTSPKR      = name+".adaptSpkr";
@@ -117,7 +132,7 @@ public class HMMVoiceConfigure extends VoiceImportComponent{
     public final String ADAPTTREEKIND  = name+".adaptTreeKind";
     public final String ADAPTTRANSKIND = name+".adaptTransKind";
 
-     
+    
     
     public String getName(){
         return name;
@@ -192,6 +207,21 @@ public class HMMVoiceConfigure extends VoiceImportComponent{
            props.put(LNGAIN,      "1");
            props.put(NSTATE,      "5");
            props.put(NITER,       "5"); 
+           
+           
+           props.put(MDLFMGC, "1.0");
+           props.put(MDLFLF0, "1.0");
+           props.put(MDLFSTR, "1.0");
+           props.put(MDLFDUR, "1.0");
+           
+           props.put(MOCCMGC, "10");
+           props.put(MOCCLF0, "10");
+           props.put(MOCCSTR, "10");
+           props.put(MOCCDUR, "0.5");
+           
+           props.put(GVMDLFMGC, "1.0");
+           props.put(GVMDLFLF0, "1.0");
+           props.put(GVMDLFSTR, "1.0");           
              
            /** settings for HTS ADAPT training scripts */
            props.put(ADAPTTRAINSPKR,     "'bdl clb jmk rms'");
@@ -252,6 +282,21 @@ public class HMMVoiceConfigure extends VoiceImportComponent{
         props2Help.put(LNGAIN,      "Use logarithmic gain instead of linear gain (default=1)");
         props2Help.put(NSTATE,      "number of HMM states (default=5)");
         props2Help.put(NITER,       "number of iterations of embedded training (default=5)");        
+        
+        
+        props2Help.put(MDLFMGC, "Tree size control for MGC parameters (smaller number = bigger tree)");
+        props2Help.put(MDLFLF0, "Tree size control for LF0 parameters (smaller number = bigger tree)");
+        props2Help.put(MDLFSTR, "Tree size control for STR parameters (smaller number = bigger tree)");
+        props2Help.put(MDLFDUR, "Tree size control for DUR parameters (smaller number = bigger tree)");
+        
+        props2Help.put(MOCCMGC, "Minimum occupancy count for MGC parameters (smaller number = bigger tree)");
+        props2Help.put(MOCCLF0, "Minimum occupancy count for LF0 parameters (smaller number = bigger tree)");
+        props2Help.put(MOCCSTR, "Minimum occupancy count for STR parameters (smaller number = bigger tree)");
+        props2Help.put(MOCCDUR, "Minimum occupancy count for DUR parameters (smaller number = bigger tree)");
+        
+        props2Help.put(GVMDLFMGC, "Tree size control for GV MGC parameters (smaller number = bigger tree)");
+        props2Help.put(GVMDLFLF0, "Tree size control for GV LF0 parameters (smaller number = bigger tree)");
+        props2Help.put(GVMDLFSTR, "Tree size control for GV STR parameters (smaller number = bigger tree)");
         
         // for scripts adapt
         props2Help.put(ADAPTTRAINSPKR,"only ADAPTSCRIPTS: speakers for training (default='awb bdl clb jmk rms')");
@@ -377,7 +422,18 @@ public class HMMVoiceConfigure extends VoiceImportComponent{
          " LNGAIN=" + getProp(LNGAIN) +
          " SAMPFREQ=" + getProp(SAMPFREQ) +
          " NSTATE=" + getProp(NSTATE) +
-         " NITER=" + getProp(NITER);
+         " NITER=" + getProp(NITER) + 
+         " MDLFMGC=" + getProp(MDLFMGC) +
+         " MDLFLF0=" + getProp(MDLFLF0) + 
+         " MDLFSTR=" + getProp(MDLFSTR) +
+         " MDLFDUR=" + getProp(MDLFDUR) +
+         " MOCCMGC=" + getProp(MOCCMGC) +
+         " MOCCLF0=" + getProp(MOCCLF0) + 
+         " MOCCDUR=" + getProp(MOCCDUR) +
+         " MOCCSTR=" + getProp(MOCCSTR) +
+         " GVMDLFMGC=" + getProp(GVMDLFMGC) +
+         " GVMDLFLF0=" + getProp(GVMDLFLF0) +
+         " GVMDLFSTR=" + getProp(GVMDLFSTR);
          
        } else {            
              /* if previous files and directories exist then run configure */

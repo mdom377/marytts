@@ -648,6 +648,17 @@ FRAMESHIFT
 FRAMELEN
 PWD
 QNUM
+MDLFMGC
+MDLFLF0
+MDLFSTR
+MDLFDUR
+MOCCMGC
+MOCCLF0
+MOCCSTR
+MOCCDUR
+GVMDLFMGC
+GVMDLFLF0
+GVMDLFSTR
 VER
 DATASET
 SPEAKER
@@ -4251,6 +4262,50 @@ fi
 
 if test -z "$STRFILTERNAME"; then
 	STRFILTERNAME=filters/mix_excitation_5filters_199taps_48Kz.txt
+fi
+
+if test -z "$MDLFMGC"; then
+	MDLFMGC=1.0
+fi
+
+if test -z "$MDLFLF0"; then
+	MDLFLF0=1.0
+fi
+
+if test -z "$MDLFSTR"; then
+	MDLFSTR=1.0
+fi
+
+if test -z "$MDLFDUR"; then
+	MDLFDUR=1.0
+fi
+
+if test -z "$MOCCMGC"; then
+	MOCCMGC=10
+fi
+
+if test -z "$MOCCLF0"; then
+	MOCCLF0=10
+fi
+
+if test -z "$MOCCSTR"; then
+	MOCCSTR=10
+fi
+
+if test -z "$MOCCDUR"; then
+	MOCCDUR=5.0
+fi
+
+if test -z "$GVMDLFMGC"; then
+	GVMDLFMGC=1.0
+fi
+
+if test -z "$GVMDLFLF0"; then
+	GVMDLFLF0=1.0
+fi
+
+if test -z "$GVMDLFSTR"; then
+	GVMDLFSTR=1.0
 fi
 
 # substitute variables
