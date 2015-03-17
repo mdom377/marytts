@@ -64,6 +64,14 @@
 package marytts.htsengine;
 
 import marytts.util.MaryUtils;
+
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
@@ -206,7 +214,7 @@ public class HTSPStream {
   
   /* mlpg: generate sequence of speech parameter vector maximizing its output probability for 
    * given pdf sequence */
-  public void mlpg(HMMData htsData, boolean useGV) {
+  public void mlpg(HMMData htsData, boolean useGV, boolean print) {
 	 int m;
 	 int M = order;
 	 boolean debug=false;
@@ -226,7 +234,7 @@ public class HTSPStream {
        /* Global variance optimisation for MCP and LF0 */
        if( useGV && gvLength>0) {           
         if(htsData.getGvMethodGradient())
-          gvParmGenGradient(m, debug);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
+          gvParmGenGradient(m, debug, print);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
                                            // if using this method the variances have to be inverse (see note in GVModel set: case NEWTON in gv optimization)
                                            // this method seems to give a better result
         else
@@ -408,7 +416,7 @@ public class HTSPStream {
  }
 
   
-  private void gvParmGenGradient(int m, boolean debug){    
+  private void gvParmGenGradient(int m, boolean debug, boolean print){    
       int t,iter;
       double step=stepInit;
       double obj=0.0, prev=0.0;
@@ -492,12 +500,33 @@ public class HTSPStream {
 
         /* If there it does not converge, the feature parameter is not optimized */
         for(t=0; t<nT; t++){
-          par[t][m] = par_ori[t];  
+         // par[t][m] = par_ori[t];  
         }      
       }
       totalNumIter = iter; 
       
       logger.info("Gradient GV optimization for feature: ("+ m + ")  number of iterations=" + totalNumIter);
+      
+	if (print)
+		
+	{
+
+	      try {
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("//home//sjai013//mcep_raw//" + m, false ), "UTF-8"));
+	        
+	
+			for(t=0; t<nT; t++){
+	        	writer.write(par[t][m] + " " + par_ori[t] + "\r\n");
+	            
+	          } 
+	        
+	        writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+      
     }
  
   

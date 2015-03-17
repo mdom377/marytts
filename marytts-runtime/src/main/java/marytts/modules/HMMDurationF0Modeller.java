@@ -811,7 +811,7 @@ public class HMMDurationF0Modeller extends InternalModule
     i=0;   
     if (lf0Frame>0){
       logger.info("Parameter generation for LF0: "); 
-      lf0Pst.mlpg(htsData, htsData.getUseGV());    
+      lf0Pst.mlpg(htsData, htsData.getUseGV(), false);    
       for(int t=0; t<voiced.length; t++){     
         if( voiced[t] ){
           f0s[t] = Math.exp(lf0Pst.getPar(i,0));
