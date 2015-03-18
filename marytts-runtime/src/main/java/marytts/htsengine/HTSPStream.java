@@ -66,6 +66,7 @@ package marytts.htsengine;
 import marytts.util.MaryUtils;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -214,10 +215,10 @@ public class HTSPStream {
   
   /* mlpg: generate sequence of speech parameter vector maximizing its output probability for 
    * given pdf sequence */
-  public void mlpg(HMMData htsData, boolean useGV, boolean print) {
+  public void mlpg(HMMData htsData, boolean useGV, String parSavePath) {
 	 int m;
 	 int M = order;
-	 boolean debug=false;
+	 boolean debug=true;
   
      if(htsData.getUseContextDependentGV())
        logger.info("Context-dependent global variance optimization: gvLength = "+ gvLength );
@@ -234,7 +235,7 @@ public class HTSPStream {
        /* Global variance optimisation for MCP and LF0 */
        if( useGV && gvLength>0) {           
         if(htsData.getGvMethodGradient())
-          gvParmGenGradient(m, debug, print);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
+          gvParmGenGradient(m, debug, parSavePath);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
                                            // if using this method the variances have to be inverse (see note in GVModel set: case NEWTON in gv optimization)
                                            // this method seems to give a better result
         else
@@ -416,7 +417,7 @@ public class HTSPStream {
  }
 
   
-  private void gvParmGenGradient(int m, boolean debug, boolean print){    
+  private void gvParmGenGradient(int m, boolean debug, String parSavePath){    
       int t,iter;
       double step=stepInit;
       double obj=0.0, prev=0.0;
@@ -507,16 +508,16 @@ public class HTSPStream {
       
       logger.info("Gradient GV optimization for feature: ("+ m + ")  number of iterations=" + totalNumIter);
       
-	if (print)
+	if (debug && parSavePath != "")
 		
 	{
 
 	      try {
-			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("//home//sjai013//mcep_raw//" + m, false ), "UTF-8"));
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(parSavePath + File.pathSeparator + m, false ), "UTF-8"));
 	        
 	
 			for(t=0; t<nT; t++){
-	        	writer.write(par[t][m] + " " + par_ori[t] + "\r\n");
+	        	writer.write(par_ori[t] + " " + par[t][m] + "\r\n");
 	            
 	          } 
 	        
