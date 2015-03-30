@@ -218,7 +218,8 @@ public class HTSPStream {
   public void mlpg(HMMData htsData, boolean useGV, String parSavePath) {
 	 int m;
 	 int M = order;
-	 boolean debug=true;
+	 boolean debug=false;
+	 boolean print=true;
   
      if(htsData.getUseContextDependentGV())
        logger.info("Context-dependent global variance optimization: gvLength = "+ gvLength );
@@ -235,7 +236,7 @@ public class HTSPStream {
        /* Global variance optimisation for MCP and LF0 */
        if( useGV && gvLength>0) {           
         if(htsData.getGvMethodGradient())
-          gvParmGenGradient(m, debug, parSavePath);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
+          gvParmGenGradient(m, debug, print, parSavePath);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
                                            // if using this method the variances have to be inverse (see note in GVModel set: case NEWTON in gv optimization)
                                            // this method seems to give a better result
         else
@@ -417,7 +418,7 @@ public class HTSPStream {
  }
 
   
-  private void gvParmGenGradient(int m, boolean debug, String parSavePath){    
+  private void gvParmGenGradient(int m, boolean debug, boolean print, String parSavePath){    
       int t,iter;
       double step=stepInit;
       double obj=0.0, prev=0.0;
@@ -508,7 +509,7 @@ public class HTSPStream {
       
       logger.info("Gradient GV optimization for feature: ("+ m + ")  number of iterations=" + totalNumIter);
       
-	if (debug && parSavePath != "")
+	if (print && parSavePath != "")
 		
 	{
 

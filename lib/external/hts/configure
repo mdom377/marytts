@@ -604,6 +604,7 @@ MAXGVITER
 USEGV
 EMEPSILON
 MAXEMITER
+NPROCESS
 LF0BANDWIDTH
 MAGBANDWIDTH
 STRBANDWIDTH
@@ -797,6 +798,7 @@ MGCBANDWIDTH
 STRBANDWIDTH
 MAGBANDWIDTH
 LF0BANDWIDTH
+NPROCESS
 MAXEMITER
 EMEPSILON
 USEGV
@@ -1492,6 +1494,7 @@ Some influential environment variables:
               band width for MAG transforms (default=10)
   LF0BANDWIDTH
               band width for log F0 transforms (default=1)
+  NPROCESS number of processes in parallel (default=5)
   MAXEMITER   max EM iteration (default=20)
   EMEPSILON   convergence factor for EM iteration (default=0.0001)
   USEGV       turn on GV-based parameter generation algorithm (0:off or 1:on,
@@ -4454,6 +4457,13 @@ if test -z "$LF0BANDWIDTH"; then
 	LF0BANDWIDTH=1
 fi
 
+if test -z "$NPROCESS"; then
+ NPROCESS=5
+fi
+
+if (("$NPROCESS" > "$NSTATE")) || (("$NPROCESS" <= "0")); then
+ NPROCESS=$NSTATE
+fi
 # substitute variables
 
 
