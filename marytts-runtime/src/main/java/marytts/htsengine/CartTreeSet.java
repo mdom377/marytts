@@ -194,8 +194,8 @@ public class CartTreeSet {
 //        if(m.getPhoneName().contentEquals("_") && (firstPh || lastPh ))
 //          data = data * 0.1;
         
-        data = data * durscale;                  
-        m.setDur(s, (int)(data+dd+0.5));
+        data = data * durscale;  
+        m.setDur(s, (int)Math.round(data+dd+0.5));
         if(m.getDur(s) < 1 )
           m.setDur(s, 1);
         
