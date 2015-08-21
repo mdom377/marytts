@@ -84,6 +84,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import marytts.signalproc.effects.RandomGaussian;
 import marytts.signalproc.process.AmplitudeNormalizer;
 import marytts.util.MaryUtils;
 import marytts.util.data.BufferedDoubleDataSource;
@@ -103,8 +104,13 @@ import marytts.util.io.FileUtils;
 
 import org.apache.log4j.Logger;
 
+/********/
 
 
+
+import marytts.signalproc.*;
+
+/********/
 /**
  * Synthesis of speech out of speech parameters.
  * Mixed excitation MLSA vocoder. 
@@ -431,6 +437,8 @@ public class HTSVocoder {
     
       f0Std = htsData.getF0Std();
       f0Shift = htsData.getF0Mean();
+      
+      
       f0MeanOri = 0.0;
 
       for(mcepframe=0,lf0frame=0; mcepframe<mcepPst.getT(); mcepframe++) {
@@ -453,21 +461,43 @@ public class HTSVocoder {
       
       magSample = 1;
       magPulseSize = 0;
-      for(mcepframe=0,lf0frame=0; mcepframe<mcepPst.getT(); mcepframe++) {
+      
+      /*****/
+      RandomGaussian perturbation = new RandomGaussian();
+      /*****/
+      
+      for(mcepframe=0,lf0frame=0; mcepframe<mcepPst.getT(); mcepframe++)
+      {
        
         /* get current feature vector mgc */ 
         for(i=0; i<m; i++)
           mc[i] = mcepPst.getPar(mcepframe, i); 
    
         /* f0 modification through the MARY audio effects */
-        if(voiced[mcepframe]){
-          f0 = f0Std * Math.exp(lf0Pst.getPar(lf0frame, 0)) + (1-f0Std) * f0MeanOri + f0Shift;       
-          lf0frame++;
-          if(f0 < 0.0)
-            f0 = 0.0;
+        if(voiced[mcepframe])
+        {
+        	
+        	/**************************************************************************************/
+        	
+        	/* _______________________Modification of the pitch by adding a random Gaussian perturbation_____________________ */
+        	f0 = f0Std * Math.exp(lf0Pst.getPar(lf0frame, 0)) + (1-f0Std) * f0MeanOri + f0Shift; 
+        	
+        	//Uncomment in order to add the perturbation to f0. Mathieu Dominguez 05/08/2015
+        	
+        	//f0 = f0 + perturbation.getGaussian(f0MeanOri, f0Shift);   
+        	//f0 = perturbation.getGaussian(f0MeanOri, f0Shift);
+        	//f0 = perturbation.getGaussian(f0, 10);
+        	
+        	/**************************************************************************************/
+        	
+        	
+        	lf0frame++;
+        	if(f0 < 0.0)
+        		f0 = 0.0;
         }
-        else{
-          f0 = 0.0;          
+        else
+        {
+        	f0 = 0.0;          
         }
          
         /* if mixed excitation get shaping filters for this frame 

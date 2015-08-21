@@ -309,7 +309,7 @@ public class HTSParameterGeneration {
 	  logger.info("Parameter generation for MGC: ");
 	  if(htsData.getUseGV())
 	    mcepPst.setGvMeanVar(htsData.getGVModelSet().getGVmeanMgc(), htsData.getGVModelSet().getGVcovInvMgc()); 
-      mcepPst.mlpg(htsData, htsData.getUseGV(), "//home/sjai013/pars/mgc/");
+      mcepPst.mlpg(htsData, htsData.getUseGV());
     }
    
     if(htsData.getUseAcousticModels())
@@ -318,7 +318,7 @@ public class HTSParameterGeneration {
         logger.info("Parameter generation for LF0: ");
         if(htsData.getUseGV())
           lf0Pst.setGvMeanVar(htsData.getGVModelSet().getGVmeanLf0(), htsData.getGVModelSet().getGVcovInvLf0()); 
-        lf0Pst.mlpg(htsData, htsData.getUseGV(), "//home/sjai013/pars/lf0/");
+        lf0Pst.mlpg(htsData, htsData.getUseGV());
         // here we need set realisedF0
         //htsData.getCartTreeSet().getNumStates()
         setRealisedF0(lf0Pst, um, ms.getNumStates());
@@ -332,7 +332,7 @@ public class HTSParameterGeneration {
         useGV = true;
         strPst.setGvMeanVar(htsData.getGVModelSet().getGVmeanStr(), htsData.getGVModelSet().getGVcovInvStr());
       }
-      strPst.mlpg(htsData, useGV, "/home/sjai013/pars/str");
+      strPst.mlpg(htsData, useGV);
     }
 
 	/* parameter generation for mag */
@@ -343,7 +343,7 @@ public class HTSParameterGeneration {
         useGV = true;
         magPst.setGvMeanVar(htsData.getGVModelSet().getGVmeanMag(), htsData.getGVModelSet().getGVcovInvMag());
       }
-	  magPst.mlpg(htsData, useGV, "//home/sjai013/pars/mag/");
+	  magPst.mlpg(htsData, useGV);
     }
 	   
     if(debug) {

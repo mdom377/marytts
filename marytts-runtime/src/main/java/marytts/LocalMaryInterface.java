@@ -459,3 +459,4 @@ public class LocalMaryInterface implements MaryInterface {
 		return "AUDIO".equals(dataType);
 	}
 }
+

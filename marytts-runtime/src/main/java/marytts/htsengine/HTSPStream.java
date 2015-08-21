@@ -63,6 +63,7 @@
 
 package marytts.htsengine;
 
+import marytts.signalproc.effects.RandomGaussian;
 import marytts.util.MaryUtils;
 
 import java.io.BufferedWriter;
@@ -116,7 +117,9 @@ public class HTSPStream {
   
   /* ____________________ GV related variables ____________________*/
   /* GV: Global mean and covariance (diagonal covariance only) */
-  private double mean, var;  /* mean and variance for current utt eqs: (16), (17)*/
+  
+  private double mean;
+  private double var;  /* mean and variance for current utt eqs: (16), (17)*/
   private int maxGVIter     = 200;      /* max iterations in the speech parameter generation considering GV */
   private double GVepsilon  = 1.0E-4;  //1.0E-4;  /* convergence factor for GV iteration */
   private double minEucNorm = 1.0E-2;  //1.0E-2;  /* minimum Euclid norm of a gradient vector */ 
@@ -196,8 +199,18 @@ public class HTSPStream {
   public int getDWwidth(int i, int j){ return dw.getWidth(i,j); }
   
   public void setGvMeanVar(double[] mean, double[] ivar){
-      gvmean = mean;
+	  
+	  /*RandomGaussian perturbation = new RandomGaussian();
+      
+	  for (int i=0 ; i<gvLength ; i++){
+		  gvmean[i] = perturbation.getGaussian(mean[i], 100);
+		  gvcovInv[i] = perturbation.getGaussian(ivar[i], 100);
+	  }
+	  */
+	  
+	  gvmean = mean;
       gvcovInv = ivar;
+	  
   }
   
   public void setGvSwitch(int i, boolean bv){
@@ -215,11 +228,11 @@ public class HTSPStream {
   
   /* mlpg: generate sequence of speech parameter vector maximizing its output probability for 
    * given pdf sequence */
-  public void mlpg(HMMData htsData, boolean useGV, String parSavePath) {
+  public void mlpg(HMMData htsData, boolean useGV) {
 	 int m;
 	 int M = order;
 	 boolean debug=false;
-	 boolean print=true;
+	 boolean print=false;
   
      if(htsData.getUseContextDependentGV())
        logger.info("Context-dependent global variance optimization: gvLength = "+ gvLength );
@@ -236,7 +249,7 @@ public class HTSPStream {
        /* Global variance optimisation for MCP and LF0 */
        if( useGV && gvLength>0) {           
         if(htsData.getGvMethodGradient())
-          gvParmGenGradient(m, debug, print, parSavePath);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
+          gvParmGenGradient(m, debug, print);      // this is the previous method we have in MARY, using the Gradient as in the Paper of Toda et. al. IEICE 2007
                                            // if using this method the variances have to be inverse (see note in GVModel set: case NEWTON in gv optimization)
                                            // this method seems to give a better result
         else
@@ -418,7 +431,7 @@ public class HTSPStream {
  }
 
   
-  private void gvParmGenGradient(int m, boolean debug, boolean print, String parSavePath){    
+  private void gvParmGenGradient(int m, boolean debug, boolean print){    
       int t,iter;
       double step=stepInit;
       double obj=0.0, prev=0.0;
@@ -509,26 +522,7 @@ public class HTSPStream {
       
       logger.info("Gradient GV optimization for feature: ("+ m + ")  number of iterations=" + totalNumIter);
       
-	if (print && parSavePath != "")
-		
-	{
-
-	      try {
-			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(parSavePath + File.pathSeparator + m, false ), "UTF-8"));
-	        
-	
-			for(t=0; t<nT; t++){
-	        	writer.write(par_ori[t] + " " + par[t][m] + "\r\n");
-	            
-	          } 
-	        
-	        writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-      
+     
     }
  
   
@@ -555,12 +549,31 @@ public class HTSPStream {
        if( t-i+1 >= 0 )
          g[t] += wuw[t-i+1][i-1] * par[t-i+1][m];  /* i as index should be i-1 */
      }   
+     
    }
       
    for(t=0, HMMobj=0.0, norm=0.0; t<nT; t++) {
        
      HMMobj += -0.5 * w1 * w * par[t][m] * (g[t] - 2.0 * wum[t]); 
-       
+     
+     
+     
+     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     
+     //To modify the pitch of the voice by adding a random perturbation following a Gaussian distribution, uncomment the following modification of the mean and the variance. Mathieu DOMINGUEZ 17/08/2015
+     
+     /* RandomGaussian perturbation = new RandomGaussian();
+   
+     mean = perturbation.getGaussian(mean, 10);
+     var = perturbation.getGaussian(var, 10);
+     
+     */
+     
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     
+     
+     
+     
      /* case STEEPEST: do not use hessian */
      //h = 1.0;
      /* case NEWTON */
